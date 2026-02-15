@@ -17,6 +17,7 @@ public class BattleshipDinámico {
                 valido=false;
                 System.out.println("El valor ingresado es invalido");
                 System.out.println("Vuelva a intentar: ");
+                n.nextLine();
             }
         }while(!valido);
         n.nextLine();
@@ -55,7 +56,7 @@ public class BattleshipDinámico {
     static void menuPrincipal(Battleship b){
         int opcion=0;
         boolean valido;
-        String username, password;
+        String username;
         System.out.println("     Menu Principal     ");
         System.out.println("Elige una de las opciones");
         System.out.println("1. Jugar Battleship\n2. Configuracion\n3. Reportes\n4. Mi perfil\n5. Cerrar Sesion ");
@@ -67,6 +68,7 @@ public class BattleshipDinámico {
                 valido=false;
                 System.out.println("El valor ingresado es invalido");
                 System.out.println("Vuelva a intentarlo: ");
+                n.nextLine();
             }
         }while(!valido);
         n.nextLine();
@@ -92,44 +94,12 @@ public class BattleshipDinámico {
                 reportes(b);
                 break;
             case 4:
-                do{
-                    System.out.println("     Mi Perfil     ");
-                    System.out.println("Elija una de las opciones");
-                    System.out.println("1. Ver mis datos\n2. Modificar mis datos\n3. Eliminar mi cuenta\n4. Regresar al menu principal");
-                    opcion=n.nextInt();
-                    n.nextLine();
-                    switch(opcion){
-                        case 1:
-                            System.out.println("Datos: ");
-                            b.mostrarDatos();
-                            break;
-                        case 2:
-                            System.out.println("Ingrese su nuevo username");
-                            username=n.nextLine();
-                            System.out.println("Ingrese su nuevo password");
-                            password=n.nextLine();
-                            if(b.modificarDatos(username, password))
-                                System.out.println("Cambios hechos con exito");
-                            else System.out.println("El nombre de usuario ya existe, no se hicieron modificaciones");
-                            break;
-                        case 3:
-                            b.eliminarCuenta();
-                            System.out.println("Cuenta eliminada con exito, regresando al menu inicio");
-                            menuInicio(b);
-                            break;
-                        case 4:
-                            System.out.println("Regresando al menu principal");
-                    }
-                }while(opcion!=4);
-                menuPrincipal(b);
+                miPerfil(b);
                 break;
             case 5:
-                System.out.println("Regresando al menu inicio");
+                b.logout();
                 menuInicio(b);
                 break;
-            default:
-                System.out.println("Opcion no valida, vuelva a intentar");
-                menuPrincipal(b);
         }
     }
     
@@ -147,6 +117,7 @@ public class BattleshipDinámico {
                 valido=false;
                 System.out.println("El valor ingresado es invalido");
                 System.out.println("Vuelva a intentarlo: ");
+                n.nextLine();
             }
         }while(!valido);
         switch(opcion){
@@ -161,6 +132,7 @@ public class BattleshipDinámico {
                         valido=false;
                         System.out.println("El valor ingresado es invalido");
                         System.out.println("Vuelva a intentarlo: ");
+                        n.nextLine();
                     }
                 }while(!valido);
                 b.cambiarDificultad(opcion);
@@ -177,6 +149,7 @@ public class BattleshipDinámico {
                             valido=false;
                             System.out.println("El valor ingresado es invalido");
                             System.out.println("Vuelva a intentarlo: ");
+                            n.nextLine();
                         }
                     }while(!valido);
                     b.cambiarModoJuego(opcion);
@@ -203,6 +176,7 @@ public class BattleshipDinámico {
                 valido=false;
                 System.out.println("El valor ingresado es invalido");
                 System.out.println("Vuelva a intentarlo: ");
+                n.nextLine();
             }
         }while(!valido);
         switch(opcion){
@@ -223,6 +197,53 @@ public class BattleshipDinámico {
             default:
                 System.out.println("Opcion invalida");
                 reportes(b);
+        }
+    }
+    
+    public static void miPerfil(Battleship b){
+        int opcion=0;
+        String username, password;
+        Boolean valido;
+        System.out.println("     Mi Perfil     ");
+        System.out.println("Elija una de las opciones");
+        System.out.println("1. Ver mis datos\n2. Modificar mis datos\n3. Eliminar mi cuenta\n4. Regresar al menu principal");
+        do{
+            try{
+                opcion=n.nextInt();
+                valido=true;
+            }catch(Exception e){
+                System.out.println("El valor ingresado es invalido");
+                System.out.println("Vuelva a intentarlo: ");
+                valido=false;
+                n.nextLine();
+            }
+        }while(!valido);
+        n.nextLine();
+        switch(opcion){
+            case 1:
+                System.out.println("Datos: ");
+                b.mostrarDatos();
+                miPerfil(b);
+                break;
+            case 2:
+                System.out.println("Ingrese su nuevo username");
+                username=n.nextLine();
+                System.out.println("Ingrese su nuevo password");
+                password=n.nextLine();
+                if(b.modificarDatos(username, password))
+                    System.out.println("Cambios hechos con exito");
+                else System.out.println("El nombre de usuario ya existe, no se hicieron modificaciones");
+                miPerfil(b);
+                break;
+            case 3:
+                b.eliminarCuenta();
+                System.out.println("Cuenta eliminada con exito, regresando al menu inicio");
+                menuInicio(b);
+                break;
+            case 4:
+                System.out.println("Regresando al menu principal");
+                menuPrincipal(b);
+                break;
         }
     }
     

@@ -1,12 +1,11 @@
 package battleshipdinámico;
+import static battleshipdinámico.BattleshipDinámico.n;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Scanner;
 import java.util.Random;
 public class Battleship {
     private ArrayList<Player> jugadores= new ArrayList<>();
-    private Player logIn;
+    private Player logIn, ranking[];
     private int dificultad=2, modoJuego=1, vidas1[], vidas2[];
     private String codigos1[], codigos2[];
     private char[][] tablero1=new char[8][8], tablero2=new char[8][8];
@@ -69,14 +68,22 @@ public class Battleship {
     }
     
     public void mostrarRanking(){
-        Collections.sort(jugadores, new Comparator<Player>(){
-            @Override
-            public int compare(Player p1, Player p2){
-                return p2.getPuntos()-p1.getPuntos();
+        Player temporal;
+        ranking =new Player[jugadores.size()];
+        for(int i=0;i<jugadores.size();i++){
+            ranking[i]=jugadores.get(i);
+        }
+        for (Player r : ranking) {
+            for(int j=1;j<ranking.length;j++){
+                if(ranking[j-1].getPuntos()<ranking[j].getPuntos()){
+                    temporal=ranking[j];
+                    ranking[j]=ranking[j-1];
+                    ranking[j-1]=temporal;
+                }
             }
-        });
+        }
         System.out.println("RANKING DE JUGADORES");
-        for(Player p: jugadores){
+        for(Player p: ranking){
             System.out.println(p.getUsername()+" Puntos: "+p.getPuntos());
         }
     }
@@ -251,11 +258,13 @@ public class Battleship {
                 fila=n.nextInt()-1;
             }catch(Exception e){
                 System.out.println("Valor ingresado invalido");
+                n.nextLine();
                 pedirBarcos(tablero, codigos, vidas, maxBarcos, contador);
                 return;
             }
             if(fila<0 || fila>8){
                 System.out.println("El valor ingresado esta fuera de los limites");
+                n.nextLine();
                 pedirBarcos(tablero, codigos, vidas, maxBarcos, contador);
                 return;
             }
@@ -264,11 +273,13 @@ public class Battleship {
                 columna=n.nextInt()-1;
             }catch(Exception e){
                 System.out.println("Valor ingresado invalido");
+                n.nextLine();                
                 pedirBarcos(tablero, codigos, vidas, maxBarcos, contador);
                 return;
             }
             if(columna<0 || columna>8){
                 System.out.println("El valor ingresado esta fuera de los limites");
+                n.nextLine();                
                 pedirBarcos(tablero, codigos, vidas, maxBarcos, contador);
                 return;
             }
@@ -342,25 +353,37 @@ public class Battleship {
         if(finPartida(vidas1)){
             finJuego(jugador2, jugador1, jugador2.getUsername()+" hundio todos los barcos de "+jugador1.getUsername()+" en modo "+getDificultad());
         }
-        else finJuego(jugador1, jugador2, jugador1.getUsername()+" hundio todos los barcos de "+jugador2.getUsername()+" en modo "+getDificultad());
+        else if(finPartida(vidas2)) finJuego(jugador1, jugador2, jugador1.getUsername()+" hundio todos los barcos de "+jugador2.getUsername()+" en modo "+getDificultad());
     }
     
     public boolean turno(Player activo, Player otroJugador, char[][] tableroOtro, String[] codigosOtro, int cantBarcos, int[] vidasOtro){
         otroJugador.mostrarTablero(tableroOtro);
         Boolean valido;
-        int fila=0, columna;
+        int fila=0, columna=0;
         System.out.println("Ingresa la fila que desea atacar (Ingrese -1 para rendirse)");
         do{
             try{
                 fila=n.nextInt()-1;
                 valido=true;
             }catch(Exception e){
-                System.out.println("Valor ingresado invalido");
+                System.out.println("El valor ingresado es invalido");
+                System.out.println("Vuelva a intentarlo: ");
                 valido=false;
+                n.nextLine();
             }
         }while(!valido);
         System.out.println("Ingrese la columna que desea atacar (Ingrese -1 para rendirse)");
-        columna=n.nextInt()-1;
+        do{
+            try{
+                columna=n.nextInt()-1;
+                valido=true;
+            }catch(Exception e){
+                System.out.println("El valor ingresado es invalido");
+                System.out.println("Vuelva a intentarlo: ");
+                valido=false;
+                n.nextLine();
+            }
+        }while(!valido);
         n.nextLine();
         if(fila==-2 && columna==-2){
             System.out.println("Esta seguro de que quiere retirarse?");
@@ -391,6 +414,7 @@ public class Battleship {
     
     public boolean atacar(char[][] tablero, int fila, int columna, String[] codigos, int[] vidas, int cantBarcos){
         if(tablero[fila][columna]=='~'){
+            System.out.println("Ataque fallido");
             return false;
         }
         int indice=barcoAtacado(tablero, fila, columna, codigos, cantBarcos);
@@ -434,7 +458,6 @@ public class Battleship {
             if(letra==codigos[i].charAt(0))
                 return i;
         }
-        System.out.println(letra);
         return -1;
     }
     
