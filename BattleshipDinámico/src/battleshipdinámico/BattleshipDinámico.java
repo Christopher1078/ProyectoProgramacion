@@ -50,6 +50,7 @@ public class BattleshipDinámico {
             default:
                 System.out.println("Opcion no valida");
                 menuInicio(b);
+                break;
         }
     }
     

@@ -36,13 +36,14 @@ abstract public class Player {
     }
     
     public void agregarLog(String nuevoLog){
-        agregarLog(nuevoLog, 9);
+        agregarLog(nuevoLog, 8);
     }
     
     private void agregarLog(String nuevoLog, int contador){
-        if(contador>0){
-            logs[contador-1]=logs[contador];
+        if(contador>=0){
+            logs[contador+1]=logs[contador];
             agregarLog(nuevoLog, contador-1);
+            return;
         }
         logs[0]=nuevoLog;
     }
