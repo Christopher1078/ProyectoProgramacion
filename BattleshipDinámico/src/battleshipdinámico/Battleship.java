@@ -416,7 +416,7 @@ public class Battleship {
             System.out.println("Ataque fallido");
             return false;
         }
-        int indice=barcoAtacado(tablero, fila, columna, codigos, cantBarcos);
+        int indice=barcoAtacado(tablero, fila, columna, codigos, cantBarcos, vidas);
         vidas[indice]-=1;
         switch(codigos[indice].charAt(0)){
             case 'P':
@@ -451,10 +451,10 @@ public class Battleship {
         return true;
     }
     
-    private int barcoAtacado(char[][] tablero, int fila, int columna, String[] codigos, int cantBarcos){
+    private int barcoAtacado(char[][] tablero, int fila, int columna, String[] codigos, int cantBarcos, int[] vidas){
         char letra=tablero[fila][columna];
         for(int i=0;i<cantBarcos;i++){
-            if(letra==codigos[i].charAt(0))
+            if(letra==codigos[i].charAt(0) && vidas[i]>0)
                 return i;
         }
         return -1;
