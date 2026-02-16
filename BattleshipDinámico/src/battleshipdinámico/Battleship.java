@@ -1,5 +1,4 @@
 package battleshipdinámico;
-import static battleshipdinámico.BattleshipDinámico.n;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
@@ -157,7 +156,7 @@ public class Battleship {
         cicloJuego(jugador1, jugador2);
     }
     
-    public void inicializarTablero(char[][] tablero){
+    private void inicializarTablero(char[][] tablero){
         for(int i=0; i<8; i++){
             for(int j=0; j<8; j++){
                 tablero[i][j]='~';
@@ -165,7 +164,7 @@ public class Battleship {
         }
     }
     
-    public void quitarMarcas(char[][] tablero){
+    private void quitarMarcas(char[][] tablero){
         for(int i=0; i<8; i++){
             for(int j=0; j<8; j++){
                 if(tablero[i][j]=='X' || tablero[i][j]=='F')
@@ -174,7 +173,7 @@ public class Battleship {
         }    
     }
     
-    public int tamanoBarcos(String codigo){
+    private int tamanoBarcos(String codigo){
         switch(codigo){
             case "PA":
                 return 5;
@@ -188,7 +187,7 @@ public class Battleship {
         return 0;
     }
     
-    public boolean tipoDisponible(String codigo, String[] codigos, int usados){
+    private boolean tipoDisponible(String codigo, String[] codigos, int usados){
         for(int i=0;i<usados;i++){
             if(codigos[i].equalsIgnoreCase(codigo)){
                 if(dificultad!=1 || !codigo.equalsIgnoreCase("DT")){
@@ -199,7 +198,7 @@ public class Battleship {
         return true;
     }
     
-    public boolean puedeColocarse(char[][] tablero, int fila, int columna, int tamano, boolean horizontal){
+    private boolean puedeColocarse(char[][] tablero, int fila, int columna, int tamano, boolean horizontal){
         if(horizontal){
             for(int i=columna;i<tamano+columna;i++){
                 if(i>=8)
@@ -220,7 +219,7 @@ public class Battleship {
         return true;
     }
     
-    public void pedirBarcos(char[][] tablero, String[] codigos, int[] vidas, int maxBarcos){
+    private void pedirBarcos(char[][] tablero, String[] codigos, int[] vidas, int maxBarcos){
         pedirBarcos(tablero, codigos, vidas, maxBarcos, 0);
     }
     
@@ -262,7 +261,7 @@ public class Battleship {
                 pedirBarcos(tablero, codigos, vidas, maxBarcos, contador);
                 return;
             }
-            if(fila<0 || fila>8){
+            if(fila<0 || fila>=8){
                 System.out.println("El valor ingresado esta fuera de los limites");
                 n.nextLine();
                 pedirBarcos(tablero, codigos, vidas, maxBarcos, contador);
@@ -277,7 +276,7 @@ public class Battleship {
                 pedirBarcos(tablero, codigos, vidas, maxBarcos, contador);
                 return;
             }
-            if(columna<0 || columna>8){
+            if(columna<0 || columna>=8){
                 System.out.println("El valor ingresado esta fuera de los limites");
                 n.nextLine();                
                 pedirBarcos(tablero, codigos, vidas, maxBarcos, contador);
@@ -312,7 +311,7 @@ public class Battleship {
         }
     }
     
-    public void colocarBarcos(char[][] tablero, String codigo, int fila, int columna, int tamano, boolean horizontal){
+    private void colocarBarcos(char[][] tablero, String codigo, int fila, int columna, int tamano, boolean horizontal){
         if(horizontal){
             for(int i=columna;i<tamano+columna;i++){
                 tablero[fila][i]=codigo.charAt(0);
@@ -325,7 +324,7 @@ public class Battleship {
         }            
     }
     
-    public String getDificultad(){
+    private String getDificultad(){
         switch(dificultad){
             case 1:
                 return "EASY";
@@ -339,7 +338,7 @@ public class Battleship {
         return null;
     }
             
-    public void cicloJuego(Player jugador1, Player jugador2){
+    private void cicloJuego(Player jugador1, Player jugador2){
         do{
             System.out.println("Turno: "+jugador1.getUsername());
             if(turno(jugador1, jugador2, tablero2, codigos2, cantBarcos(), vidas2))
@@ -356,7 +355,7 @@ public class Battleship {
         else if(finPartida(vidas2)) finJuego(jugador1, jugador2, jugador1.getUsername()+" hundio todos los barcos de "+jugador2.getUsername()+" en modo "+getDificultad());
     }
     
-    public boolean turno(Player activo, Player otroJugador, char[][] tableroOtro, String[] codigosOtro, int cantBarcos, int[] vidasOtro){
+    private boolean turno(Player activo, Player otroJugador, char[][] tableroOtro, String[] codigosOtro, int cantBarcos, int[] vidasOtro){
         otroJugador.mostrarTablero(tableroOtro);
         Boolean valido;
         int fila=0, columna=0;
@@ -412,7 +411,7 @@ public class Battleship {
         return finPartida(vidasOtro);
     }
     
-    public boolean atacar(char[][] tablero, int fila, int columna, String[] codigos, int[] vidas, int cantBarcos){
+    private boolean atacar(char[][] tablero, int fila, int columna, String[] codigos, int[] vidas, int cantBarcos){
         if(tablero[fila][columna]=='~'){
             System.out.println("Ataque fallido");
             return false;
@@ -452,7 +451,7 @@ public class Battleship {
         return true;
     }
     
-    public int barcoAtacado(char[][] tablero, int fila, int columna, String[] codigos, int cantBarcos){
+    private int barcoAtacado(char[][] tablero, int fila, int columna, String[] codigos, int cantBarcos){
         char letra=tablero[fila][columna];
         for(int i=0;i<cantBarcos;i++){
             if(letra==codigos[i].charAt(0))
@@ -461,7 +460,7 @@ public class Battleship {
         return -1;
     }
     
-    public boolean finPartida(int[] vidas){
+    private boolean finPartida(int[] vidas){
         for(int v: vidas){
             if(v!=0){
                 return false;
@@ -470,11 +469,11 @@ public class Battleship {
         return true;
     }
     
-    public boolean barcoHundido(int[] vidas, int indice){
+    private boolean barcoHundido(int[] vidas, int indice){
         return vidas[indice]==0;
     }
     
-    public void regenerarTablero(char[][] tablero, String[] codigos, int[] vidas, int cantBarcos){
+    private void regenerarTablero(char[][] tablero, String[] codigos, int[] vidas, int cantBarcos){
         regenerarTablero(tablero, codigos, vidas, cantBarcos, 0);
     }
     
@@ -501,7 +500,7 @@ public class Battleship {
         }
     }
     
-    public void finJuego(Player ganador, Player perdedor, String mensaje){
+    private void finJuego(Player ganador, Player perdedor, String mensaje){
         System.out.println(mensaje);
         ganador.sumarPuntos(3);
         if(ganador.equals(logIn))
